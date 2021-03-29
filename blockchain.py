@@ -12,6 +12,8 @@ open_transactions = []
 
 owner = 'Wilhelm'
 
+participants = {'Wilhelm'}
+
 
 def get_last_blockchain_value():
     """ Returns the current value of the last blockchain """
@@ -36,6 +38,8 @@ def add_transaction(recipient, sender=owner, amount=1.0):
     }
 
     open_transactions.append(transaction)
+    participants.add(sender)
+    participants.add(recipient)
 
 
 def hash_block(block):
@@ -96,6 +100,7 @@ while waiting_for_input:
     print('1: Add a new transaction value')
     print('2: Mine a new block')
     print('3: Output the transaction blocks')
+    print('4: Output participants')
     print('h: Manipulate the chain')
     print('q: Quit')
 
@@ -109,6 +114,8 @@ while waiting_for_input:
         mine_block()
     elif user_choice == '3':
         print_blockchain_elements()
+    elif user_choice == '4':
+        print(participants)
     elif user_choice == 'h':
         if len(blockchain) >= 1:
             blockchain[0] = {
