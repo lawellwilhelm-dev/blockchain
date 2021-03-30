@@ -40,10 +40,19 @@ def add_transaction(recipient, sender=owner, amount=1.0):
         'amount': amount
     }
 
-    open_transactions.append(transaction)
-    participants.add(sender)
-    participants.add(recipient)
+    if verify_transaction(transaction):
+        open_transactions.append(transaction)
+        participants.add(sender)
+        participants.add(recipient)
+        return True
+    return False
 
+
+def verify_transaction(transaction):
+    sender_balance = get_balance(transaction['sender'])
+
+    return sender_balance > transaction['amount']
+    
 
 def hash_block(block):
     return '-'.join([str(value) for key, value in block.items()])
@@ -76,6 +85,13 @@ def get_balance(participant):
         [tx['amount'] for tx in block['transactions'] if tx['sender'] == participant] 
         for block in blockchain
     ]
+
+    open_tx_sender = [
+        tx['amount'] for tx in open_transactions if tx['sender'] == participant
+    ]
+    
+    tx_sender.append(open_tx_sender)
+    
     amount_sent = 0
     
     for tx in tx_sender:
@@ -144,7 +160,10 @@ while waiting_for_input:
 
     if user_choice == '1':
         recipient, amount = get_transaction_value()
-        add_transaction(recipient, amount=amount)
+        if add_transaction(recipient, amount=amount):
+            print('Added transaction')
+        else:
+            print('Transaction failed')
         print(open_transactions)
     elif user_choice == '2':
         if mine_block():
