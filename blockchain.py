@@ -208,4 +208,3 @@ while waiting_for_input:
     print(get_balance('Wilhelm'))
     
 print('Done!')
-    
