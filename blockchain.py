@@ -205,6 +205,6 @@ while waiting_for_input:
         print('Invalid blockchain!')
         break
 
-    print(get_balance('Wilhelm'))
+    print(f'Balance of {owner}: {get_balance(owner) : 6.2f}')
     
 print('Done!')
